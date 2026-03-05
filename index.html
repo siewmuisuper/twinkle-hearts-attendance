@@ -74,7 +74,7 @@
     <input type="text" id="searchInput" placeholder="Search your name…" autocomplete="off" spellcheck="false">
     <span class="search-icon">⌕</span>
   </div>
-  <p class="hint">Type at least 2 characters. Partial names work — try first name only.</p>
+  <p class="hint">Type your first or last name. Results match from the start of each word.</p>
   <div id="output"></div>
 </div>
 <footer>Twinkle Hearts · Internal volunteer records</footer>
@@ -92,13 +92,19 @@ function formatDate(d) {
 const input = document.getElementById("searchInput");
 const output = document.getElementById("output");
 
+function nameMatches(name, q) {
+  // Match if any word in the name starts with q
+  const words = name.toLowerCase().split(/[\s,]+/);
+  return words.some(w => w.startsWith(q));
+}
+
 function search(q) {
   q = q.trim().toLowerCase();
   if (q.length < 2) {
     output.innerHTML = `<div class="state-box"><div class="state-icon">🔍</div><h3>Search your name</h3><p>Type your name above to see all the events you have joined.</p></div>`;
     return;
   }
-  const results = DATA.filter(r => r.name.toLowerCase().includes(q));
+  const results = DATA.filter(r => nameMatches(r.name, q));
   if (!results.length) {
     output.innerHTML = `<div class="state-box"><div class="state-icon">🤔</div><h3>No records found</h3><p>No one matching "<strong>${q}</strong>" found.<br>Try a different spelling or first name only.</p></div>`;
     return;
