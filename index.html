@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Twinkle Hearts — Volunteer Attendance</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf8f2;
+    --warm-white: #fff9f4;
+    --coral: #e8705a;
+    --coral-light: #f5ede9;
+    --coral-dark: #c95840;
+    --teal: #3a7d7b;
+    --teal-light: #e8f2f2;
+    --charcoal: #2c2c2c;
+    --mid: #6b6560;
+    --border: #e8e0d8;
+    --gold: #c9a84c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--charcoal);
+    padding: 28px 32px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: var(--coral);
+    opacity: 0.15;
+  }
+  .header-inner { max-width: 700px; margin: 0 auto; position: relative; }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+  .header h1 span { color: var(--coral); font-style: italic; }
+  .header p {
+    color: #b8b0a8;
+    font-size: 13.5px;
+    margin-top: 5px;
+    font-weight: 300;
+  }
+
+  /* ── Main ── */
+  .main { max-width: 700px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  /* ── Search box ── */
+  .search-wrap { position: relative; margin-bottom: 10px; }
+  .search-wrap input {
+    width: 100%;
+    padding: 16px 52px 16px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--charcoal);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-wrap input::placeholder { color: #b8b0a8; }
+  .search-wrap input:focus {
+    border-color: var(--coral);
+    box-shadow: 0 0 0 4px rgba(232,112,90,0.1);
+  }
+  .search-icon {
+    position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+    color: #b8b0a8; pointer-events: none; font-size: 18px;
+  }
+  .hint { font-size: 12px; color: #b8b0a8; margin-bottom: 28px; padding-left: 4px; }
+
+  /* ── Results ── */
+  .results-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 16px;
+  }
+  .results-title { font-family: 'DM Serif Display', serif; font-size: 22px; }
+  .results-title span { color: var(--coral); }
+  .results-count { font-size: 12.5px; color: var(--mid); font-weight: 500; }
+
+  /* Stats strip */
+  .stats-strip {
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 40px;
+    padding: 8px 16px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px;
+  }
+  .stat-pill .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .stat-pill .dot.coral { background: var(--coral); }
+  .stat-pill .dot.teal  { background: var(--teal); }
+  .stat-pill .dot.gold  { background: var(--gold); }
+  .stat-pill strong { font-weight: 600; }
+
+  /* Cards */
+  .event-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: border-color 0.15s, transform 0.15s;
+    animation: fadeUp 0.25s ease both;
+  }
+  .event-card:hover { border-color: var(--coral); transform: translateY(-1px); }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .event-card:nth-child(2)  { animation-delay: 0.03s; }
+  .event-card:nth-child(3)  { animation-delay: 0.06s; }
+  .event-card:nth-child(4)  { animation-delay: 0.09s; }
+  .event-card:nth-child(5)  { animation-delay: 0.12s; }
+
+  .card-left { flex: 1; }
+  .card-event { font-weight: 500; font-size: 14.5px; line-height: 1.4; margin-bottom: 4px; }
+  .card-meta { font-size: 12px; color: var(--mid); display: flex; gap: 12px; flex-wrap: wrap; }
+  .card-meta span { display: flex; align-items: center; gap: 4px; }
+  .card-meta svg { opacity: 0.5; }
+
+  .attended-badge {
+    flex-shrink: 0; margin-left: 14px;
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.3px;
+  }
+  .attended-badge.yes { background: var(--teal-light); color: var(--teal); }
+  .attended-badge.no  { background: #ffeee9; color: var(--coral-dark); }
+
+  /* Year divider */
+  .year-divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 24px 0 14px;
+  }
+  .year-divider::before, .year-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .year-divider span {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--mid);
+  }
+
+  /* Empty / idle states */
+  .state-box {
+    text-align: center; padding: 60px 20px;
+  }
+  .state-icon { font-size: 40px; margin-bottom: 14px; }
+  .state-box h3 { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 8px; }
+  .state-box p  { color: var(--mid); font-size: 14px; line-height: 1.6; }
+
+  /* Footer */
+  footer {
+    text-align: center; padding: 20px;
+    font-size: 11.5px; color: #c8c0b8;
+    border-top: 1px solid var(--border);
+    max-width: 700px; margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Twinkle <span>Hearts</span></h1>
+    <p>Volunteer Attendance Records · 2023 – 2026</p>
+  </div>
+</div>
+
+<div class="main">
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Search your name…" autocomplete="off" spellcheck="false">
+    <span class="search-icon">⌕</span>
+  </div>
+  <p class="hint">Type at least 2 characters to search. Partial names work too.</p>
+  <div id="output"></div>
+</div>
+
+<footer>Twinkle Hearts · Internal volunteer records</footer>
+
+<script>
+const RAW = [{"name":"Jasmine","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Jennifer Boey","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Zhi Xiang","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Kelvin Kong","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Irene Haclicsl.C","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Florence Ong","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Irene Tiah","event":"Mid Autumn Celebration","date":"2025-09-27","attended":0,"beneficiary":"Bukit Batok"},{"name":"Sze min","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Tee Mei Chin","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Doreen Goh","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Teh Poh Kuan","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Hung Le","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Helen Wee","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Bernice","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Wu XM","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Richard Kong","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Prerna","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Cheryl Yeow","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Pan Wen","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Andy Tan","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Loan Nguyen","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Sarvesh Sinha","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Phuong","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Jason and 4 children's","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Devyani","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Royce Wong","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Zanni","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Roy Cheong","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Linn","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Sam Le","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Phuy Leng","event":"Mid Autumn Celebration","date":"2025-09-27","attended":0,"beneficiary":"Bukit Batok"},{"name":"Neo Sing Hwee","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"poh siew hwa","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Angelina Lee","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Huixin","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Sachin","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":""},{"name":"Tan CK","event":"Mid Autumn Celebration","date":"2025-09-27","attended":1,"beneficiary":"Bukit Batok"},{"name":"Eric Hoo","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"Loan Nguyen","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"Denise","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"Owen Chan","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"poh siew hwa","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"Siew Mui","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"Roy Cheong","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"Doreen Goh","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"Jennifer Boey","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"Shirley Chua","event":"Birthday Celebration","date":"2025-10-04","attended":1,"beneficiary":"Woodlands"},{"name":"Amy Ng","event":"Birthday Celebration","date":"2025-10-04","attended":0,"beneficiary":"Woodlands"},{"name":"Royce","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Linn","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Simin","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Chelsia","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Amulya","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Jennifer","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Zhixiang","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Phuong","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Kara Huang","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Mona Siow","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Pei Shan Ng","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Pingping Shao","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Neng Jie","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Xin'en Chua","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Fuming Wang","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Hao Wu","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Daniel PIELS","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Eileen","event":"Oceanarium Outing","date":"2025-10-11","attended":1,"beneficiary":"AMK and CSU"},{"name":"Amy Ng","event":"Oct Birthday Celebration","date":"2025-10-11","attended":0,"beneficiary":"CSU"},{"name":"Cynthia Wong","event":"Oct Birthday Celebration","date":"2025-10-11","attended":1,"beneficiary":"CSU"},{"name":"Bernice","event":"Oct Birthday Celebration","date":"2025-10-11","attended":0,"beneficiary":"CSU"},{"name":"Andy","event":"Oct Birthday Celebration","date":"2025-10-11","attended":1,"beneficiary":"CSU"},{"name":"Cecilia","event":"Oct Birthday Celebration","date":"2025-10-11","attended":1,"beneficiary":"CSU"},{"name":"Lee Li Ern","event":"Oct Birthday Celebration","date":"2025-10-11","attended":1,"beneficiary":"CSU"},{"name":"Siew Mui","event":"Oct Birthday Celebration","date":"2025-10-11","attended":1,"beneficiary":"CSU"},{"name":"Royce","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Linn","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Phuong","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Amy","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Joe","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Jennifer","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Richard","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Simin","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Yvonne","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Li Ern","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Kaley","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Manvitha","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Angela Vo","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Cherie Foo","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Joy Foo","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Elena","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Sze Zen","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Aileen","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Toni Gil","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Barbara Caluag","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Mark Renn Caluag","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Tan CK","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Ratika Goel","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Wilson Dsilva","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Annie Chen","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Eithu","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Senthil Krishnasamy","event":"Oceanarium Outing","date":"2025-10-25","attended":1,"beneficiary":"Bukit Batok and Woodlands"},{"name":"Bernice","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"Jennifer","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"Julie","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"Bianca","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"Neo Sing Hwee","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"Yvonne Ng","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"Denise","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"Roy Cheong","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"CHIN MEE SHYAN","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"poh siew hwa","event":"Nov Birthday Celebration","date":"2025-11-01","attended":1,"beneficiary":"Woodlands"},{"name":"Wan ping","event":"Nov Birthday Celebration","date":"2025-11-08","attended":1,"beneficiary":"CSU"},{"name":"Max","event":"Nov Birthday Celebration","date":"2025-11-08","attended":1,"beneficiary":"CSU"},{"name":"Sean","event":"Nov Birthday Celebration","date":"2025-11-08","attended":1,"beneficiary":"CSU"},{"name":"Siew Mui","event":"Nov Birthday Celebration","date":"2025-11-08","attended":1,"beneficiary":"CSU"},{"name":"Neo Sing Hwee","event":"Nov Birthday Celebration","date":"2025-11-08","attended":1,"beneficiary":"CSU"},{"name":"Joey Khor","event":"Nov Birthday Celebration","date":"2025-11-08","attended":1,"beneficiary":"CSU"},{"name":"Lee Li Ern","event":"Nov Birthday Celebration","date":"2025-11-08","attended":1,"beneficiary":"CSU"},{"name":"Amy Ho","event":"Nov Birthday Celebration","date":"2025-11-08","attended":1,"beneficiary":"CSU"},{"name":"Jayesh Sharma","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Lynn Ko","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Pawan","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Devayani Reva","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Xavier Au","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Charlton Martin","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Siew Mui","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Richard Kong","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Neo Sing Hwee","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Ng Woan Ling","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Chetan","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Neha","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Jennifer Boey","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Julie Ju","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Pradnya Jain","event":"Deepavali Celebrations","date":"2025-11-15","attended":1,"beneficiary":"AMK"},{"name":"Francis","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Phuong","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Saloni Sinha","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Kow Hui Wah, Lynn","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Sarvesh Sinha","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Pan Wen","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Tanya Prasad","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Jennifer","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Neha","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Amy","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Fiona Liu","event":"Tekka Centre Outing","date":"2025-11-22","attended":1,"beneficiary":"Bukit Batok"},{"name":"Xavier Au","event":"Tekka Centre Outing","date":"2025-11-22","attended":0,"beneficiary":"Bukit Batok"},{"name":"Bernice","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Irene Haclicsl.C","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Roy Cheong","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Jennifer","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Angeline Lee","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Siew Mui","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Zarni","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"poh","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Helen Tan","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Julie","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Qian Qian","event":"Dec Birthday Celebration","date":"2025-12-06","attended":1,"beneficiary":"Woodlands"},{"name":"Sean","event":"Dec Birthday Celebration","date":"2025-12-13","attended":1,"beneficiary":"CSU"},{"name":"Jennifer Boey","event":"Dec Birthday Celebration","date":"2025-12-13","attended":1,"beneficiary":"CSU"},{"name":"Shirley Chua","event":"Dec Birthday Celebration","date":"2025-12-13","attended":1,"beneficiary":"CSU"},{"name":"Neo Sing Hwee","event":"Dec Birthday Celebration","date":"2025-12-13","attended":1,"beneficiary":"CSU"},{"name":"Siew Mui","event":"Dec Birthday Celebration","date":"2025-12-13","attended":1,"beneficiary":"CSU"},{"name":"Wan Ping","event":"Dec Birthday Celebration","date":"2025-12-13","attended":1,"beneficiary":"CSU"},{"name":"Qian Qian","event":"Dec Birthday Celebration","date":"2025-12-13","attended":1,"beneficiary":"CSU"},{"name":"Amy","event":"Dec Birthday Celebration","date":"2025-12-13","attended":1,"beneficiary":"CSU"},{"name":"Cynthia Wong","event":"Dec Birthday Celebration","date":"2025-12-13","attended":1,"beneficiary":"CSU"},{"name":"Angeline Lee","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"siew mui","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Lee Li Ern","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Bianca Leong","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Yuda -Carols friend","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Amy Yeo","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Andy","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Jennifer Boey","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Eric Hoo","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Loan Nguyen","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Denise","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"poh","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Maggie Chan","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Neo Sing Hwee","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Yvonne Ng","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Bernice","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Lay Hong- My Friend","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Easter Chua","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Helen Tan","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Roy Cheong","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Adrian Ang","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Irene","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Amy Ng","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Doreen Goh","event":"Jan Birthday Celebration","date":"2026-01-03","attended":1,"beneficiary":"Woodlands"},{"name":"Carole's","event":"Jan Birthday Celebration","date":"2026-01-10","attended":1,"beneficiary":"CSU"},{"name":"Jennifer Boey","event":"Jan Birthday Celebration","date":"2026-01-10","attended":1,"beneficiary":"CSU"},{"name":"Lee Li Ern","event":"Jan Birthday Celebration","date":"2026-01-10","attended":1,"beneficiary":"CSU"},{"name":"Sean","event":"Jan Birthday Celebration","date":"2026-01-10","attended":1,"beneficiary":"CSU"},{"name":"Andy","event":"Jan Birthday Celebration","date":"2026-01-10","attended":1,"beneficiary":"CSU"},{"name":"Helen Wee Lian Heok","event":"Jan Birthday Celebration","date":"2026-01-10","attended":1,"beneficiary":"CSU"},{"name":"Siew mui","event":"Jan Birthday Celebration","date":"2026-01-10","attended":1,"beneficiary":"CSU"},{"name":"Francis Chiang","event":"Jan Birthday Celebration","date":"2026-01-10","attended":0,"beneficiary":"CSU"},{"name":"Cynthia Wong","event":"Jan Birthday Celebration","date":"2026-01-10","attended":1,"beneficiary":"CSU"},{"name":"Amy","event":"Jan Birthday Celebration","date":"2026-01-10","attended":1,"beneficiary":"CSU"},{"name":"Pan Wen","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Alvin Low","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Debi TNG","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Eddy Ho","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Eunice Yap","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Kwa Hui Qi","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Judy Zhu","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Kathy Ahmad","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Loy Kiet Ying","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Lorraine Wong","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Shaun Seow","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Shenali Perera","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Yeo Teck Wee","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Victor Ting","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Vikram Sanghi","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Lin Xinhao","event":"Hari Raya Baju Selection","date":"2026-01-16","attended":1,"beneficiary":"AMK"},{"name":"Alan","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Siew mui","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Kevin","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Sze min","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Chanel","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Irene Haclicsl.C","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Richard Kong","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Corane","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Pan Wen","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Jennifer Boey","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Amy","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"seet mooi","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Julie","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Qian Qian","event":"Bukit Batok Coffeeshop Outing","date":"2026-01-17","attended":1,"beneficiary":"BB"},{"name":"Park Suns Min + wife, son","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Amy Yao + husband","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Vivek Bansal","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Anita Khemka","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Koh Wei Ling","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Scott Tang","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Neil Fu","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Cheryl Yeow","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Phuong","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Yvonne Ng","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Trupti","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Anagha","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Devayani Reva","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Sarvesh Sinha","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Sean Liew","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Shruti Zatakia","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Chin Mee Shyan","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Ei Mon","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Shirley Chua","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Tan Poh Jee","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Ritesh","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Pan Wen","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Neo Sing Hwee","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Jennifer Boey","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Julie","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Saloni Sinha","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Bianca Leong","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Jayesh Sharma","event":"Chinatown Outing","date":"2026-01-24","attended":1,"beneficiary":"BB and Woodlands"},{"name":"Cecilia Goh","event":"Chinatown Outing","date":"2026-01-24","attended":0,"beneficiary":"BB and Woodlands"},{"name":"Sheetal Sharma","event":"Chinatown Outing","date":"2026-01-24","attended":0,"beneficiary":"BB and Woodlands"},{"name":"Neo Sing Hwee","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Jennifer Boey","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Bernice","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Yvonne","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Julie","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Denise","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Cecilia Goh","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Loan","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Yeo Siew Mui","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Doreen Goh","event":"Feb Birthday Celebration","date":"2026-02-07","attended":1,"beneficiary":"Woodlands"},{"name":"Siew Mui","event":"Feb Birthday Celebration","date":"2026-02-14","attended":1,"beneficiary":"CSU"},{"name":"Ei Mon","event":"Feb Birthday Celebration","date":"2026-02-14","attended":1,"beneficiary":"CSU"},{"name":"Wan Ping","event":"Feb Birthday Celebration","date":"2026-02-14","attended":1,"beneficiary":"CSU"},{"name":"Neo Sing Hwee","event":"Feb Birthday Celebration","date":"2026-02-14","attended":1,"beneficiary":"CSU"},{"name":"Cynthia Wong","event":"Feb Birthday Celebration","date":"2026-02-14","attended":1,"beneficiary":"CSU"},{"name":"Jennifer","event":"Feb Birthday Celebration","date":"2026-02-14","attended":1,"beneficiary":"CSU"},{"name":"Helen Wee Lian Heok","event":"Feb Birthday Celebration","date":"2026-02-14","attended":1,"beneficiary":"CSU"},{"name":"Lee Li Ern","event":"Feb Birthday Celebration","date":"2026-02-14","attended":1,"beneficiary":"CSU"},{"name":"Amy","event":"Feb Birthday Celebration","date":"2026-02-14","attended":1,"beneficiary":"CSU"},{"name":"Ying Shan Lee","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Annie Ang","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Julie Ju","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":0,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Amy","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Lisa (Royce)","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Julie","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Kevin Lim","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Anthony Lewis","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Jack (Royce)","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Erica SUN","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Royce Wong","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Sean Liew","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Pan Wen","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Cecilia Goh","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Anagha + Shruti + Trupti","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Cha Martin","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":0,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Isabel Ng","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Zach (Royce)","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Shirley Chua","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Doreen Goh","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Bernice","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"YEO SIEW MUI","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Sze min","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Jennifer","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"},{"name":"Gladis Lee","event":"Geylang Serai Bazaar Outing (Ang Mo Kio and Chronic Sick Unit)","date":"2026-03-15","attended":1,"beneficiary":"Ang Mo Kio / Chronic Sick Unit"}];
+
+// Add older years data (sampled key entries from 2023-2025 wide sheets)
+const EXTRA = [{"name":"Pan Wen","event":"Chinatown Outing","date":"2025-01-11","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"Birthday Celebrations at CSU","date":"2025-02-08","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"Geylang serai bazaar outing (AMK, CSU)","date":"2025-03-15","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"Geylang serai bazaar outing (Wlds, BB)","date":"2025-03-22","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"Family Portrait and Vesak Day Celebration (CSU)","date":"2025-04-26","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"Birthday Celebrations at Woodlands","date":"2025-05-03","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"Changi Jewel Outing (AMK and CSU)","date":"2025-05-17","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"Changi Jewel Outing (BB and WDLDs)","date":"2025-05-24","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"AMK Floral Fantasy and Super Trees Outing","date":"2025-07-19","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"Wlds and BB Floral Fantasy and Super Trees Outing","date":"2025-07-26","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"National Orchid Gardens Outing (AMK and BB)","date":"2025-08-16","attended":1,"beneficiary":""},{"name":"Pan Wen","event":"Family Portrait at Bukit Batok","date":"2025-08-23","attended":1,"beneficiary":""},{"name":"Ritesh","event":"Birthday Celebrations at CSU","date":"2025-01-11","attended":1,"beneficiary":""},{"name":"Ritesh","event":"Geylang serai bazaar outing (Wlds, BB)","date":"2025-03-22","attended":1,"beneficiary":""},{"name":"Ritesh","event":"Family Portrait and Vesak Day Celebration (CSU)","date":"2025-04-26","attended":1,"beneficiary":""},{"name":"Ritesh","event":"AMK Floral Fantasy and Super Trees Outing","date":"2025-07-19","attended":1,"beneficiary":""},{"name":"Ritesh","event":"National Orchid Gardens Outing (AMK and BB)","date":"2025-08-16","attended":1,"beneficiary":""},{"name":"Ritesh","event":"Project Joy Food at AMK","date":"2025-09-05","attended":1,"beneficiary":""},{"name":"Ritesh","event":"Grocery Shopping and Tea Break (AMK)","date":"2025-08-29","attended":1,"beneficiary":""},{"name":"Ritesh","event":"Hindu Temple Visit and Lunch (AMK)","date":"2025-08-30","attended":1,"beneficiary":""},{"name":"Ei Mon","event":"Birthday Celebrations at Woodlands","date":"2025-09-06","attended":1,"beneficiary":""}];
+
+const DATA = [...RAW, ...EXTRA];
+
+function getYear(d) {
+  if (!d) return 'Unknown';
+  if (d.match(/^\d{4}-/)) return d.slice(0,4);
+  return 'Unknown';
+}
+
+function formatDate(d) {
+  if (!d || d === 'Unknown') return '—';
+  if (d.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    const [y,m,dd] = d.split('-');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${parseInt(dd)} ${months[parseInt(m)-1]} ${y}`;
+  }
+  return d;
+}
+
+const input = document.getElementById('searchInput');
+const output = document.getElementById('output');
+
+function search(q) {
+  q = q.trim().toLowerCase();
+  if (q.length < 2) {
+    output.innerHTML = `<div class="state-box"><div class="state-icon">🔍</div><h3>Search your name</h3><p>Type your name above to see<br>all the events you've joined.</p></div>`;
+    return;
+  }
+
+  const results = DATA.filter(r => r.name.toLowerCase().includes(q));
+
+  if (!results.length) {
+    output.innerHTML = `<div class="state-box"><div class="state-icon">🤔</div><h3>No records found</h3><p>We couldn't find anyone matching "<strong>${q}</strong>".<br>Try a different spelling or your first name only.</p></div>`;
+    return;
+  }
+
+  // Sort by date descending
+  results.sort((a,b) => {
+    const da = a.date && a.date.match(/^\d{4}-\d{2}-\d{2}$/) ? a.date : '0000-00-00';
+    const db = b.date && b.date.match(/^\d{4}-\d{2}-\d{2}$/) ? b.date : '0000-00-00';
+    return db.localeCompare(da);
+  });
+
+  const attended = results.filter(r => r.attended === 1).length;
+  const notAttended = results.filter(r => r.attended !== 1).length;
+  const years = [...new Set(results.map(r => getYear(r.date)).filter(y => y !== 'Unknown'))].sort().reverse();
+
+  let html = `
+    <div class="results-header">
+      <div class="results-title">Records for <span>${results[0].name}</span></div>
+      <div class="results-count">${results.length} entries found</div>
+    </div>
+    <div class="stats-strip">
+      <div class="stat-pill"><span class="dot coral"></span><strong>${attended}</strong>&nbsp;attended</div>
+      ${notAttended > 0 ? `<div class="stat-pill"><span class="dot" style="background:#e8b0a0"></span><strong>${notAttended}</strong>&nbsp;not attended</div>` : ''}
+      <div class="stat-pill"><span class="dot teal"></span><strong>${years.length}</strong>&nbsp;year${years.length!==1?'s':''}</div>
+    </div>`;
+
+  // Group by year
+  const byYear = {};
+  results.forEach(r => {
+    const y = getYear(r.date);
+    if (!byYear[y]) byYear[y] = [];
+    byYear[y].push(r);
+  });
+
+  const sortedYears = Object.keys(byYear).sort().reverse();
+  sortedYears.forEach(year => {
+    html += `<div class="year-divider"><span>${year}</span></div>`;
+    byYear[year].forEach(r => {
+      html += `
+        <div class="event-card">
+          <div class="card-left">
+            <div class="card-event">${r.event}</div>
+            <div class="card-meta">
+              <span>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                ${formatDate(r.date)}
+              </span>
+              ${r.beneficiary ? `<span>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                ${r.beneficiary}
+              </span>` : ''}
+            </div>
+          </div>
+          <span class="attended-badge ${r.attended === 1 ? 'yes' : 'no'}">${r.attended === 1 ? '✓ Attended' : '✗ Absent'}</span>
+        </div>`;
+    });
+  });
+
+  output.innerHTML = html;
+}
+
+input.addEventListener('input', () => search(input.value));
+search('');
+</script>
+</body>
+</html>
