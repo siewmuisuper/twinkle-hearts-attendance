@@ -55,6 +55,11 @@
   .multi-match strong { display: block; margin-bottom: 8px; }
   .name-btn { display: inline-block; margin: 3px; padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; font-family: "DM Sans", sans-serif; transition: border-color 0.15s, background 0.15s; }
   .name-btn:hover { border-color: var(--coral); background: #fff5f3; }
+  .welcome-msg { background: #fff8f0; border: 1.5px solid #f0dcc8; border-radius: 14px; padding: 18px 20px; margin-bottom: 28px; }
+  .welcome-icon { font-size: 24px; margin-bottom: 8px; }
+  .welcome-msg p { font-size: 13.5px; color: var(--mid); line-height: 1.7; }
+  .contact-note { margin-top: 10px !important; font-size: 12.5px !important; color: #a89888 !important; }
+  .contact-note strong { color: var(--charcoal); }
   .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 28px; }
   .tab-btn { padding: 12px 24px; font-family: "DM Sans", sans-serif; font-size: 14px; font-weight: 500; background: none; border: none; border-bottom: 3px solid transparent; margin-bottom: -2px; cursor: pointer; color: var(--mid); transition: color 0.15s, border-color 0.15s; }
   .tab-btn.active { color: var(--coral); border-bottom-color: var(--coral); }
@@ -94,7 +99,12 @@
     <input type="text" id="searchInput" placeholder="Search your name…" autocomplete="off" spellcheck="false">
     <span class="search-icon">⌕</span>
   </div>
-  <p class="hint">Type your full name exactly as registered (e.g. Sean Liew, Siew Mui).</p>
+  <p class="hint">Type your full name.</p>
+  <div class="welcome-msg">
+    <div class="welcome-icon">💛</div>
+    <p>Thank you for showing up, again and again. Every event you attend makes a real difference to the lives of our beneficiaries — your time and heart are truly appreciated.</p>
+    <p class="contact-note">Spotted a mistake? We're only human! Please reach out to <strong>Siew Mui</strong> to get it corrected.</p>
+  </div>
   <div id="output"></div>
   </div><!-- end tab-search -->
 
