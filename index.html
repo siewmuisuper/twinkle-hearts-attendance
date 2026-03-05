@@ -70,7 +70,7 @@
     <input type="text" id="searchInput" placeholder="Search your name…" autocomplete="off" spellcheck="false">
     <span class="search-icon">⌕</span>
   </div>
-  <p class="hint">Type your exact first or last name for best results.</p>
+  <p class="hint">Type your full name exactly as registered (e.g. Sean Liew, Siew Mui).</p>
   <div id="output"></div>
 </div>
 <footer>Twinkle Hearts · Internal volunteer records</footer>
@@ -84,19 +84,9 @@ function formatDate(d) {
   return `${parseInt(dd)} ${MONTHS[parseInt(m)-1]} ${y}`;
 }
 
-// Match only if query equals a whole word in the name (not a prefix of a longer word)
-function nameMatches(name, q) {
-  const words = name.toLowerCase().split(/[\s,\(\)\/\-]+/).filter(Boolean);
-  return words.some(w => w === q);
-}
-
-// Also support prefix matching for multi-word queries like "jennifer b"
+// Match if query equals the full name (case-insensitive)
 function nameMatchesQuery(name, q) {
-  const parts = q.trim().toLowerCase().split(/\s+/);
-  if (parts.length === 1) return nameMatches(name, parts[0]);
-  // Multi-word: all parts must be found as word-start matches
-  const words = name.toLowerCase().split(/[\s,\(\)\/\-]+/).filter(Boolean);
-  return parts.every(p => words.some(w => w.startsWith(p)));
+  return name.toLowerCase() === q.toLowerCase();
 }
 
 const input = document.getElementById("searchInput");
